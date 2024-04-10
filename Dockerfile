@@ -18,4 +18,9 @@ RUN [ "${DOCKER_COMPOSE_VERSION}" = "latest" ] \
     && docker compose version \
     && docker-compose version
 
+ENV RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+RUN mkdir -p "${RUNNER_TOOL_CACHE}" \
+    && chgrp docker "${RUNNER_TOOL_CACHE}" \
+    && chmod g+rwx "${RUNNER_TOOL_CACHE}"
+
 USER runner
