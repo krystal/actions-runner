@@ -1,19 +1,6 @@
 ---
 on:
   workflow_dispatch:
-    inputs:
-      base_image:
-        description: "Base image for the Dockerfile"
-        required: true
-        default: "ghcr.io/actions/actions-runner"
-      base_tag:
-        description: "Base tag for the Dockerfile"
-        required: true
-        default: "latest"
-      compose_version:
-        description: "Docker Compose version for the Dockerfile"
-        required: true
-        default: "latest"
   schedule:
     - cron: "0 12 * * 6"
   push:
@@ -29,22 +16,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - id: args
-        run: |
-          echo "base_image=${BASE_IMAGE:-ghcr.io/actions/actions-runner}" >> $GITHUB_OUTPUT
-          echo "base_tag=${BASE_TAG:-latest}" >> $GITHUB_OUTPUT
-          echo "compose_version=${COMPOSE_VERSION:-latest}" >> $GITHUB_OUTPUT
-        env:
-          BASE_IMAGE: ${{ github.event.inputs.base_image }}
-          BASE_TAG: ${{ github.event.inputs.base_tag }}
-          COMPOSE_VERSION: ${{ github.event.inputs.compose_version }}
       - uses: docker/build-push-action@v5
         with:
-          load: true
           tags: ghcr.io/${{ github.repository }}:latest
+          push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            BASE_IMAGE=${{ steps.args.outputs.base_image }}
-            RUNNER_VERSION=${{ steps.args.outputs.base_tag }}
-            DOCKER_COMPOSE_VERSION=${{ steps.args.outputs.compose_version }}
