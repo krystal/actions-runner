@@ -1,0 +1,64 @@
+---
+name: CI
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 6"
+  push:
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+    with:
+      image: ghcr.io/${{ github.repository }}-ci:run-${{ github.run_id }}
+
+  test-ruby:
+    needs: [build]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}-ci:run-${{ github.run_id }}
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306:3306
+        env:
+          MARIADB_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd="healthcheck.sh --su-mysql --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: "3"
+        env:
+          BUNDLE_GEMFILE: test/ruby/Gemfile
+      - run: |
+          bundle install
+          bundle exec rspec
+        working-directory: test/ruby
+
+  test-go:
+    needs: [build]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}-ci:run-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache-dependency-path: test/go/go.sum
+      - run: go test -v
+        working-directory: test/go
+
+  publish:
+    needs: [test-ruby, test-go]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_build.yml
+    with:
+      image: ghcr.io/${{ github.repository }}:latest

@@ -7,7 +7,10 @@ ARG DOCKER_COMPOSE_VERSION=latest
 USER root
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
+    build-essential \
     curl \
+    git \
+    libmysqlclient-dev \
     libyaml-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
