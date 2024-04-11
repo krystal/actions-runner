@@ -53,9 +53,23 @@ jobs:
           bundle exec rspec
         working-directory: test/ruby
 
+  test-go:
+    needs: [build]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}-ci:run-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache-dependency-path: test/go/go.sum
+      - run: go test -v
+        working-directory: test/go
+
   publish:
     runs-on: ubuntu-latest
-    needs: [test-ruby]
+    needs: [test-ruby, test-go]
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
