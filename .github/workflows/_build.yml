@@ -1,0 +1,38 @@
+---
+name: Build
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: "Output image to publish"
+        type: string
+        default: "ghcr.io/krystal/actions-runner:latest"
+      runner_version:
+        description: "Runner version"
+        type: string
+        default: "2.315.0" # https://github.com/actions/runner/releases
+      docker_compose_version:
+        description: "Docker compose version"
+        type: string
+        default: "2.26.1" # https://github.com/docker/compose/releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          tags: ${{ inputs.image }}
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            RUNNER_VERSION=${{ inputs.runner_version }}
+            DOCKER_COMPOSE_VERSION=${{ inputs.docker_compose_version }}
