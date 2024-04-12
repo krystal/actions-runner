@@ -10,8 +10,13 @@ RUN apt-get update && \
     build-essential \
     curl \
     git \
+    liblzma-dev \
     libmysqlclient-dev \
+    libssl-dev \
+    libxml2-dev \
     libyaml-dev \
+    patch \
+    zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
