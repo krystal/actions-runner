@@ -15,6 +15,10 @@ on:
         description: "Docker compose version"
         type: string
         default: "2.26.1" # https://github.com/docker/compose/releases
+      platforms:
+        description: "Platforms to build for"
+        type: string
+        default: "linux/amd64,linux/arm64"
 
 jobs:
   build:
@@ -30,6 +34,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           tags: ${{ inputs.image }}
+          platforms: ${{ inputs.platforms }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
