@@ -9,6 +9,7 @@ Differences from official image:
 
 - Support for using various `setup-*` actions like `ruby/setup-ruby` and
   `actions/setup-go`.
+- Includes the [GitHub CLI](https://cli.github.com) tool (`gh`).
 - Support for using `docker compose`/`docker-compose` commands.
 
 ## Usage
