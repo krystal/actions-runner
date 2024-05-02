@@ -5,6 +5,7 @@ on:
   schedule:
     - cron: "0 12 * * 6"
   push:
+  pull_request:
 
 jobs:
   build:
