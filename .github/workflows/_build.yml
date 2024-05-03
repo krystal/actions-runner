@@ -10,7 +10,7 @@ on:
       runner_version:
         description: "Runner version"
         type: string
-        default: "2.316.1" # https://github.com/actions/runner/releases
+        default: "2.315.0" # https://github.com/actions/runner/releases
       gh_version:
         description: "GitHub CLI version"
         type: string
