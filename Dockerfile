@@ -16,6 +16,7 @@ RUN apt-get update && \
     libxml2-dev \
     libyaml-dev \
     patch \
+    openssh-client \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
