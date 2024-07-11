@@ -14,7 +14,7 @@ on:
       gh_version:
         description: "GitHub CLI version"
         type: string
-        default: "2.49.0" # https://github.com/cli/cli/releases
+        default: "2.52.0" # https://github.com/cli/cli/releases
       docker_compose_version:
         description: "Docker compose version"
         type: string
