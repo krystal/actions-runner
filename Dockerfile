@@ -9,37 +9,38 @@ RUN apt-get update && \
     build-essential \
     curl \
     git \
+    jc \
     jq \
     liblzma-dev \
     libmysqlclient-dev \
     libssl-dev \
     libxml2-dev \
     libyaml-dev \
-    patch \
     openssh-client \
+    patch \
+    wget \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GH_VERSION=latest
-RUN --mount=type=secret,id=github_token,dst=/run/secrets/github_token \
-    ARCH="$(uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/')" && \
-    if [ "${GH_VERSION}" = "latest" ]; then \
-    TOKEN="$(cat /run/secrets/github_token 2>/dev/null || true)" && \
-    ([ -n "$TOKEN" ] && CURL_OPTS="-H \"Authorization: token $TOKEN\"" || CURL_OPTS="") && \
-    curl $CURL_OPTS -s "https://api.github.com/repos/cli/cli/releases/latest" | \
-    jq -r --arg arch "$ARCH" '.assets[] | select(.name | endswith("_linux_" + $arch + ".deb")) | .browser_download_url' | \
-    xargs curl -L -o /tmp/gh-cli.deb; \
-    else \
-    curl -L "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_$ARCH.deb" -o /tmp/gh-cli.deb; \
-    fi; \
-    dpkg -i /tmp/gh-cli.deb && rm /tmp/gh-cli.deb
+# Install ubi — https://github.com/houseabsolute/ubi
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
+    curl -s https://raw.githubusercontent.com/houseabsolute/ubi/master/bootstrap/bootstrap-ubi.sh | sh \
+    && ubi --version
 
-ARG DOCKER_COMPOSE_VERSION=latest
-RUN [ "${DOCKER_COMPOSE_VERSION}" = "latest" ] \
-    && curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose \
-    || curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose \
-    && chmod +x /usr/local/lib/docker/cli-plugins/docker-compose \
+# Install yq — https://github.com/mikefarah/yq
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
+    ubi --in /usr/local/bin --project mikefarah/yq \
+    && yq --version
+
+# Install gh (GitHub CLI) — https://github.com/cli/cli
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
+    ubi --in /usr/local/bin --project cli/cli --exe gh \
+    && gh --version
+
+# Install docker-compose — https://github.com/docker/compose
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
+    ubi --in /usr/local/lib/docker/cli-plugins/ --project docker/compose --exe docker-compose \
     && ln -s /usr/local/lib/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose \
     && docker compose version \
     && docker-compose version

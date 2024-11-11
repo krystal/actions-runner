@@ -11,14 +11,6 @@ on:
         description: "Runner version"
         type: string
         default: "latest" # https://github.com/actions/runner/releases
-      gh_version:
-        description: "GitHub CLI version"
-        type: string
-        default: "2.57.0" # https://github.com/cli/cli/releases
-      docker_compose_version:
-        description: "Docker compose version"
-        type: string
-        default: "2.29.5" # https://github.com/docker/compose/releases
       platforms:
         description: "Platforms to build for"
         type: string
@@ -44,7 +36,5 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             RUNNER_VERSION=${{ inputs.runner_version }}
-            GH_VERSION=${{ inputs.gh_version }}
-            DOCKER_COMPOSE_VERSION=${{ inputs.docker_compose_version }}
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
