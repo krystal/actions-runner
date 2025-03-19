@@ -14,7 +14,7 @@ import (
 func initDB(dbPath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to open database: %v", err)
+		return nil, fmt.Errorf("failed to open database: %v", err)
 	}
 
 	_, err = db.Exec(
@@ -22,7 +22,7 @@ func initDB(dbPath string) (*sql.DB, error) {
 			`(key TEXT PRIMARY KEY, value TEXT);`,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create table: %v", err)
+		return nil, fmt.Errorf("failed to create table: %v", err)
 	}
 
 	return db, nil
@@ -66,25 +66,25 @@ func mainE() error {
 	switch os.Args[1] {
 	case "set":
 		if len(os.Args) != 4 {
-			return errors.New("Expected key and value")
+			return errors.New("expected key and value")
 		}
 		key, value := os.Args[2], os.Args[3]
 		err := Set(db, key, value)
 		if err != nil {
-			return fmt.Errorf("Failed to set value: %v", err)
+			return fmt.Errorf("failed to set value: %v", err)
 		}
 	case "get":
 		if len(os.Args) != 3 {
-			return errors.New("Expected key")
+			return errors.New("expected key")
 		}
 		key := os.Args[2]
 		value, err := Get(db, key)
 		if err != nil {
-			return fmt.Errorf("Failed to get value: %v", err)
+			return fmt.Errorf("failed to get value: %v", err)
 		}
 		fmt.Println(value)
 	default:
-		return errors.New("Expected 'set' or 'get' command")
+		return errors.New("expected 'set' or 'get' command")
 	}
 
 	return nil
