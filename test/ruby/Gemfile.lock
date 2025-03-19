@@ -1,42 +1,74 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    commonmarker (1.0.4)
+    ast (2.4.2)
+    bigdecimal (3.1.9)
+    commonmarker (2.1.1)
       rb_sys (~> 0.9)
-    commonmarker (1.0.4-aarch64-linux)
-    commonmarker (1.0.4-arm64-darwin)
-    commonmarker (1.0.4-x86_64-darwin)
-    commonmarker (1.0.4-x86_64-linux)
-    diff-lcs (1.5.1)
+    commonmarker (2.1.1-aarch64-linux)
+    commonmarker (2.1.1-arm64-darwin)
+    commonmarker (2.1.1-x86_64-darwin)
+    commonmarker (2.1.1-x86_64-linux)
+    diff-lcs (1.6.0)
+    json (2.10.2)
+    language_server-protocol (3.17.0.4)
+    lint_roller (1.1.0)
+    mini_portile2 (2.8.8)
     mysql2 (0.5.6)
-    nokogiri (1.16.4-aarch64-linux)
+    nokogiri (1.18.4)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.4-arm-linux)
+    nokogiri (1.18.4-aarch64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.16.4-arm64-darwin)
+    nokogiri (1.18.4-arm-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.16.4-x86-linux)
+    nokogiri (1.18.4-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.4-x86_64-darwin)
+    nokogiri (1.18.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.4-x86_64-linux)
+    nokogiri (1.18.4-x86_64-linux-gnu)
       racc (~> 1.4)
-    racc (1.7.3)
-    rb_sys (0.9.94)
-    redcarpet (3.6.0)
+    parallel (1.26.3)
+    parser (3.3.7.1)
+      ast (~> 2.4.1)
+      racc
+    racc (1.8.1)
+    rainbow (3.1.1)
+    rake-compiler-dock (1.9.1)
+    rb_sys (0.9.111)
+      rake-compiler-dock (= 1.9.1)
+    redcarpet (3.6.1)
+    regexp_parser (2.10.0)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
       rspec-mocks (~> 3.13.0)
-    rspec-core (3.13.0)
+    rspec-core (3.13.3)
       rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.0)
+    rspec-expectations (3.13.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.0)
+    rspec-mocks (3.13.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-support (3.13.1)
+    rspec-support (3.13.2)
+    rubocop (1.74.0)
+      json (~> 2.3)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.1.0)
+      parallel (~> 1.10)
+      parser (>= 3.3.0.2)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 2.9.3, < 3.0)
+      rubocop-ast (>= 1.38.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 4.0)
+    rubocop-ast (1.40.0)
+      parser (>= 3.3.1.0)
+    ruby-progressbar (1.13.0)
+    unicode-display_width (3.1.4)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
 
 PLATFORMS
   aarch64-linux
@@ -47,11 +79,16 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bigdecimal
   commonmarker
   mysql2
   nokogiri
   redcarpet
   rspec
+  rubocop
+
+RUBY VERSION
+   ruby 3.4.2p28
 
 BUNDLED WITH
-   2.5.6
+   2.6.2
