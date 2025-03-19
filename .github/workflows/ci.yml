@@ -64,19 +64,22 @@ jobs:
     with:
       image: ghcr.io/${{ github.repository }}:latest
 
-  versions:
-    needs: [publish]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    container:
-      image: ghcr.io/${{ github.repository }}-ci:run-${{ github.run_id }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: ./scripts/extract-versions.sh > versions.json
-      # Note: This step commits and pushes using the automatic GitHub token
-      # secret, avoiding an infinite loop of workflow runs.
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(ci): update versions.json"
-          file_pattern: "versions.json"
+  # TODO: Figure out how to make this work with branch protection rules.
+  # Essentially the GITHUB_TOKEN needs permissions to bypass the protection
+  # rules.
+  # versions:
+  #   needs: [publish]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   container:
+  #     image: ghcr.io/${{ github.repository }}:latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: ./scripts/extract-versions.sh > versions.json
+  #     # Note: This step commits and pushes using the automatic GitHub token
+  #     # secret, avoiding an infinite loop of workflow runs.
+  #     - uses: stefanzweifel/git-auto-commit-action@v5
+  #       with:
+  #         commit_message: "chore(ci): update versions.json"
+  #         file_pattern: "versions.json"
